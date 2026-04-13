@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23765" systemVersion="24A335" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
+    <entity name="Plant" representedClassName="Plant" syncable="YES" codeGenerationType="none">
+        <attribute name="coverPhotoAssetIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="NO" attributeType="String"/>
+        <attribute name="nextWateringDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="plantedDate" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="species" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="wateringIntervalDays" optional="NO" attributeType="Integer 16" defaultValueString="7"/>
+        <relationship name="records" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GrowthRecord" inverseName="plant" inverseEntity="GrowthRecord"/>
+    </entity>
+    <entity name="GrowthRecord" representedClassName="GrowthRecord" syncable="YES" codeGenerationType="none">
+        <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="healthStatusRaw" optional="YES" attributeType="String"/>
+        <attribute name="heightCM" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="photoAssetIdentifier" optional="NO" attributeType="String"/>
+        <attribute name="recordedAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="visionSummary" optional="YES" attributeType="String"/>
+        <relationship name="plant" optional="NO" maxCount="1" deletionRule="Nullify" destinationEntity="Plant" inverseName="records" inverseEntity="Plant"/>
+    </entity>
+    <elements>
+        <element name="Plant" positionX="-63" positionY="-18" width="128" height="194"/>
+        <element name="GrowthRecord" positionX="148" positionY="-18" width="128" height="164"/>
+    </elements>
+</model>
