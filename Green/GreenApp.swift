@@ -2,12 +2,21 @@ import SwiftUI
 
 @main
 struct GreenApp: App {
-    private let persistenceController = PersistenceController.shared
+    private let appContainer: AppContainer
+    private let plantDashboardViewModel: PlantDashboardViewModel
+
+    init() {
+        let appContainer = AppContainer()
+        self.appContainer = appContainer
+        self.plantDashboardViewModel = appContainer.makePlantDashboardViewModel()
+    }
 
     var body: some Scene {
         WindowGroup {
-            PlantDashboardView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            PlantDashboardView(
+                container: appContainer,
+                viewModel: plantDashboardViewModel
+            )
         }
     }
 }

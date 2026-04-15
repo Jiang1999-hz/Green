@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,18 @@
 		A0000000000000000000003B /* PlantHealthAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000001B /* PlantHealthAnalysisService.swift */; };
 		A0000000000000000000003C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000001C /* Assets.xcassets */; };
 		A0000000000000000000003D /* GreenModel.xcdatamodeld in Resources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000001D /* GreenModel.xcdatamodeld */; };
+		A00000000000000000000070 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000076 /* AppContainer.swift */; };
+		A00000000000000000000071 /* PlantRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000077 /* PlantRecord.swift */; };
+		A00000000000000000000072 /* PlantDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000078 /* PlantDraft.swift */; };
+		A00000000000000000000073 /* PlantRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000079 /* PlantRepository.swift */; };
+		A00000000000000000000074 /* CoreDataPlantRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000007A /* CoreDataPlantRepository.swift */; };
+		A00000000000000000000075 /* PlantDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000007B /* PlantDashboardViewModel.swift */; };
+		A00000000000000000000088 /* PlantDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000082 /* PlantDetailViewModel.swift */; };
+		A00000000000000000000089 /* PlantDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000083 /* PlantDetailView.swift */; };
+		A0000000000000000000008A /* PlantFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000084 /* PlantFormViewModel.swift */; };
+		A0000000000000000000008B /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000085 /* CameraCaptureView.swift */; };
+		A0000000000000000000008C /* PhotoAssetImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000086 /* PhotoAssetImageView.swift */; };
+		A0000000000000000000008D /* PlantFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000087 /* PlantFormView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +52,18 @@
 		A0000000000000000000001D /* GreenModel.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; path = GreenModel.xcdatamodeld; sourceTree = "<group>"; };
 		A0000000000000000000001E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A00000000000000000000025 /* Green.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Green.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000000000000000000076 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
+		A00000000000000000000077 /* PlantRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantRecord.swift; sourceTree = "<group>"; };
+		A00000000000000000000078 /* PlantDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDraft.swift; sourceTree = "<group>"; };
+		A00000000000000000000079 /* PlantRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantRepository.swift; sourceTree = "<group>"; };
+		A0000000000000000000007A /* CoreDataPlantRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPlantRepository.swift; sourceTree = "<group>"; };
+		A0000000000000000000007B /* PlantDashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDashboardViewModel.swift; sourceTree = "<group>"; };
+		A00000000000000000000082 /* PlantDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetailViewModel.swift; sourceTree = "<group>"; };
+		A00000000000000000000083 /* PlantDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetailView.swift; sourceTree = "<group>"; };
+		A00000000000000000000084 /* PlantFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantFormViewModel.swift; sourceTree = "<group>"; };
+		A00000000000000000000085 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
+		A00000000000000000000086 /* PhotoAssetImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetImageView.swift; sourceTree = "<group>"; };
+		A00000000000000000000087 /* PlantFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantFormView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,8 +96,11 @@
 		A00000000000000000000004 /* Green */ = {
 			isa = PBXGroup;
 			children = (
+				A0000000000000000000007C /* App */,
 				A00000000000000000000010 /* GreenApp.swift */,
 				A00000000000000000000022 /* Features */,
+				A0000000000000000000007D /* Domain */,
+				A0000000000000000000007E /* Data */,
 				A00000000000000000000020 /* DesignSystem */,
 				A00000000000000000000021 /* Persistence */,
 				A00000000000000000000024 /* Services */,
@@ -116,6 +143,13 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000011 /* PlantDashboardView.swift */,
+				A0000000000000000000007B /* PlantDashboardViewModel.swift */,
+				A00000000000000000000083 /* PlantDetailView.swift */,
+				A00000000000000000000082 /* PlantDetailViewModel.swift */,
+				A00000000000000000000087 /* PlantFormView.swift */,
+				A00000000000000000000084 /* PlantFormViewModel.swift */,
+				A00000000000000000000086 /* PhotoAssetImageView.swift */,
+				A00000000000000000000085 /* CameraCaptureView.swift */,
 			);
 			path = Plants;
 			sourceTree = "<group>";
@@ -129,6 +163,48 @@
 				A0000000000000000000001B /* PlantHealthAnalysisService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000007C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000076 /* AppContainer.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000007D /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000080 /* Plants */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		A0000000000000000000007E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000081 /* Plants */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000080 /* Plants */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000077 /* PlantRecord.swift */,
+				A00000000000000000000078 /* PlantDraft.swift */,
+			);
+			path = Plants;
+			sourceTree = "<group>";
+		};
+		A00000000000000000000081 /* Plants */ = {
+			isa = PBXGroup;
+			children = (
+				A00000000000000000000079 /* PlantRepository.swift */,
+				A0000000000000000000007A /* CoreDataPlantRepository.swift */,
+			);
+			path = Plants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +288,18 @@
 				A00000000000000000000039 /* NotificationPermissionService.swift in Sources */,
 				A0000000000000000000003A /* GrowthAnimationService.swift in Sources */,
 				A0000000000000000000003B /* PlantHealthAnalysisService.swift in Sources */,
+				A00000000000000000000070 /* AppContainer.swift in Sources */,
+				A00000000000000000000071 /* PlantRecord.swift in Sources */,
+				A00000000000000000000072 /* PlantDraft.swift in Sources */,
+				A00000000000000000000073 /* PlantRepository.swift in Sources */,
+				A00000000000000000000074 /* CoreDataPlantRepository.swift in Sources */,
+				A00000000000000000000075 /* PlantDashboardViewModel.swift in Sources */,
+				A00000000000000000000088 /* PlantDetailViewModel.swift in Sources */,
+				A00000000000000000000089 /* PlantDetailView.swift in Sources */,
+				A0000000000000000000008A /* PlantFormViewModel.swift in Sources */,
+				A0000000000000000000008B /* CameraCaptureView.swift in Sources */,
+				A0000000000000000000008C /* PhotoAssetImageView.swift in Sources */,
+				A0000000000000000000008D /* PlantFormView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +360,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-					SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 			};
 			name = Debug;
 		};
@@ -322,62 +410,62 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_FAST_MATH = YES;
-					SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		A00000000000000000000054 /* Debug */ = {
 			isa = XCBuildConfiguration;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					"CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]" = NO;
-					"CODE_SIGNING_REQUIRED[sdk=iphonesimulator*]" = NO;
-					"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
-					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 1;
-					GENERATE_INFOPLIST_FILE = NO;
-					INFOPLIST_FILE = Green/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]" = NO;
+				"CODE_SIGNING_REQUIRED[sdk=iphonesimulator*]" = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Green/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-					MARKETING_VERSION = 1.0;
-					PRODUCT_BUNDLE_IDENTIFIER = com.local.green;
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-					SWIFT_EMIT_LOC_STRINGS = YES;
-					SWIFT_VERSION = 5.0;
-					TARGETED_DEVICE_FAMILY = 1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.green;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		A00000000000000000000055 /* Release */ = {
 			isa = XCBuildConfiguration;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					"CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]" = NO;
-					"CODE_SIGNING_REQUIRED[sdk=iphonesimulator*]" = NO;
-					"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
-					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 1;
-					GENERATE_INFOPLIST_FILE = NO;
-					INFOPLIST_FILE = Green/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]" = NO;
+				"CODE_SIGNING_REQUIRED[sdk=iphonesimulator*]" = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphonesimulator*]" = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Green/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-					MARKETING_VERSION = 1.0;
-					PRODUCT_BUNDLE_IDENTIFIER = com.local.green;
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-					SWIFT_EMIT_LOC_STRINGS = YES;
-					SWIFT_VERSION = 5.0;
-					TARGETED_DEVICE_FAMILY = 1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.green;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -1,5 +1,211 @@
 # Green Development Handoff
 
+## 2026-04-15
+
+### Session Goal
+
+- Start Step 1 of the MVP plan: `Plant archive CRUD`.
+- Refactor the app away from `SwiftUI View -> Core Data direct binding` so later iterations can extend the codebase without making the feature layer heavier.
+
+### What Was Completed
+
+- Introduced a more maintainable app structure before continuing feature work:
+  - `AppContainer` as a composition root
+  - `PlantRepository` protocol + `CoreDataPlantRepository` implementation
+  - `PlantRecord` and `PlantDraft` as domain-level feature models
+  - feature-specific view models for dashboard, detail, and form flows
+- Replaced the foundation-only dashboard with a real plant archive home flow.
+- Implemented the main Step 1 CRUD chain:
+  - plant list on the home screen
+  - create plant form
+  - edit plant form
+  - delete plant flow
+  - plant detail screen
+- Connected plant cover photo handling to PhotoKit:
+  - choose a photo from the system photo library
+  - capture a photo in-app
+  - save captured photos into the system album named `植物成长`
+  - persist only the `PHAsset.localIdentifier`
+
+### Key Architecture Changes Made Today
+
+#### 1. Composition Root and Dependency Wiring
+
+- Added `Green/App/AppContainer.swift`
+- The app entry now creates dependencies once and passes feature view models from the container instead of having views construct storage-facing dependencies themselves.
+- Result:
+  - Later feature work can add services and repositories without scattering wiring logic through views.
+
+#### 2. Repository Boundary Between UI and Core Data
+
+- Added:
+  - `Green/Data/Plants/PlantRepository.swift`
+  - `Green/Data/Plants/CoreDataPlantRepository.swift`
+- Views no longer depend directly on `NSManagedObject` fetches.
+- Result:
+  - The UI layer is now insulated from storage details.
+  - CRUD behavior has a single write/read boundary for later reuse in more screens.
+
+#### 3. Feature Models and State Layer
+
+- Added:
+  - `Green/Domain/Plants/PlantRecord.swift`
+  - `Green/Domain/Plants/PlantDraft.swift`
+  - `Green/Features/Plants/PlantDashboardViewModel.swift`
+  - `Green/Features/Plants/PlantDetailViewModel.swift`
+  - `Green/Features/Plants/PlantFormViewModel.swift`
+- Result:
+  - `PlantDashboardView` no longer uses `@FetchRequest`.
+  - Feature state is centralized in view models instead of being spread across SwiftUI view code and Core Data bindings.
+
+### Feature Work Completed Today
+
+#### 1. Plant Home / List Screen
+
+- `Green/Features/Plants/PlantDashboardView.swift` now shows:
+  - hero section
+  - plant count summary
+  - "due today" summary
+  - real plant card list
+  - empty state
+  - error state
+  - add-plant entry points
+- Tapping a plant opens a detail page.
+
+#### 2. Plant Detail Screen
+
+- Added `Green/Features/Plants/PlantDetailView.swift`
+- Added `Green/Features/Plants/PlantDetailViewModel.swift`
+- Current detail page supports:
+  - cover photo display
+  - plant metadata display
+  - notes display
+  - edit action
+  - delete action with confirmation
+
+#### 3. Plant Form Screen
+
+- Added `Green/Features/Plants/PlantFormView.swift`
+- Added `Green/Features/Plants/PlantFormViewModel.swift`
+- Current form supports:
+  - name
+  - species
+  - location
+  - planted date
+  - watering interval in days
+  - notes
+  - cover photo selection from system photos
+  - cover photo capture from camera
+  - cover photo removal
+
+#### 4. PhotoKit Cover Photo Flow
+
+- Extended `Green/Services/PhotoLibraryService.swift`
+- Added:
+  - permission gating for read/write access
+  - saving a captured `UIImage` into the system photo library
+  - creating/fetching the custom album `植物成长`
+  - adding the created asset into that album
+- Added `Green/Features/Plants/PhotoAssetImageView.swift` to render stored asset identifiers in SwiftUI.
+
+### Current Product Status
+
+- The project has moved beyond the foundation dashboard.
+- Step 1 `Plant archive CRUD` is now functionally started and the main archive flow exists.
+- Current implemented Step 1 scope:
+  - list plants
+  - create plant
+  - edit plant
+  - delete plant
+  - view plant detail
+  - attach a cover photo
+
+### Current Functional State
+
+- The app is no longer only a placeholder architecture shell.
+- The current primary user flow is:
+  1. Open the home screen
+  2. Add a plant
+  3. Fill in basic profile information
+  4. Optionally choose or capture a cover photo
+  5. Save the plant
+  6. Reopen it through the list
+  7. Edit or delete it from the detail page
+
+### Known Issues / Decisions Still Pending
+
+#### 1. Watering Data Model Is Not Fully Aligned With The PRD Yet
+
+- The current data model still uses `nextWateringDate`.
+- The PRD data model expects `wateringInterval` plus `lastWateredDate`.
+- Current temporary behavior:
+  - the form recalculates `nextWateringDate` when saving a plant
+- Why this matters:
+  - this is acceptable for Step 1 display work
+  - but reminder logic in Step 3 will be cleaner and more correct if the model is migrated to `lastWateredDate -> nextWateringDate`
+- Recommended fix before notification work:
+  - add `lastWateredDate`
+  - compute `nextWateringDate` from business logic rather than storing only a precomputed value
+
+#### 2. Full Build Verification In The Codex Sandbox Is Still Blocked
+
+- `swiftc -typecheck` passed for the current Swift code.
+- `xcodebuild -list` passed and the Xcode project parses correctly.
+- Full `xcodebuild build` inside the sandbox still fails because `actool` tries to access unavailable simulator runtimes through `CoreSimulatorService`.
+- Result:
+  - The reliable verification path remains building/running in the Xcode GUI on the local machine.
+
+#### 3. Step 1 Is Feature-Complete In Core Flow, But Still Needs Product Polish
+
+- No automated tests were added yet.
+- No user-facing success feedback was added after save/delete.
+- The form currently focuses on correctness and architecture, not polish or validation richness.
+- The dashboard and detail UI still need final visual refinement if the PRD design language is to be matched more closely.
+
+#### 4. Photo Flow Is Good Enough For Step 1, But Not Finished As A General Media Layer
+
+- Cover photos are handled.
+- Growth record photo ingestion is not implemented yet.
+- EXIF-based record date extraction is not implemented yet.
+- Limited photo-library management UI is still minimal.
+- Camera capture behavior still needs real-device validation in Xcode.
+
+### Files Changed Today
+
+- `Green.xcodeproj/project.pbxproj`
+- `Green/GreenApp.swift`
+- `Green/App/AppContainer.swift`
+- `Green/Domain/Plants/PlantRecord.swift`
+- `Green/Domain/Plants/PlantDraft.swift`
+- `Green/Data/Plants/PlantRepository.swift`
+- `Green/Data/Plants/CoreDataPlantRepository.swift`
+- `Green/Features/Plants/PlantDashboardView.swift`
+- `Green/Features/Plants/PlantDashboardViewModel.swift`
+- `Green/Features/Plants/PlantDetailView.swift`
+- `Green/Features/Plants/PlantDetailViewModel.swift`
+- `Green/Features/Plants/PlantFormView.swift`
+- `Green/Features/Plants/PlantFormViewModel.swift`
+- `Green/Features/Plants/PhotoAssetImageView.swift`
+- `Green/Features/Plants/CameraCaptureView.swift`
+- `Green/Services/PhotoLibraryService.swift`
+
+### Recommended Next Step
+
+Continue polishing and stabilizing Step 1 before moving to Step 2.
+
+Suggested order:
+
+1. Verify the new CRUD flow directly in Xcode on Simulator / device.
+2. Decide whether to migrate the watering model now (`lastWateredDate`) or defer it until the reminder phase.
+3. Add save/delete feedback and tighten validation UX.
+4. If Step 1 is accepted, then start Step 2: `Growth record + PhotoKit timeline`.
+
+### Resume Prompt
+
+If resuming later, start from this instruction:
+
+`Continue Green from Docs/Development-Handoff.md. Step 1 plant archive CRUD has been structurally implemented with AppContainer + Repository + ViewModels. Verify the new CRUD flow in Xcode, resolve the watering-model decision, and then continue polishing Step 1 before moving to growth records.`
+
 ## 2026-04-13
 
 ### Session Goal
