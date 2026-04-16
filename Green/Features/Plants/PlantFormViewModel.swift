@@ -55,6 +55,10 @@ final class PlantFormViewModel: ObservableObject {
         isSaving || isProcessingCoverPhoto
     }
 
+    var nameValidationMessage: String? {
+        draft.trimmedName.isEmpty ? "请输入植物名称后再保存。" : nil
+    }
+
     func handleSelectedCoverPhoto(
         assetIdentifier: String?,
         previewImage: UIImage?
@@ -116,6 +120,8 @@ final class PlantFormViewModel: ObservableObject {
     }
 
     func save() -> Bool {
+        errorMessage = nil
+
         guard validateDraft() else {
             return false
         }
@@ -142,17 +148,7 @@ final class PlantFormViewModel: ObservableObject {
     }
 
     private func validateDraft() -> Bool {
-        guard !draft.trimmedName.isEmpty else {
-            errorMessage = "请输入植物名称。"
-            return false
-        }
-
-        guard draft.wateringIntervalDays > 0 else {
-            errorMessage = "浇水频率至少为 1 天。"
-            return false
-        }
-
-        return true
+        !draft.trimmedName.isEmpty && draft.wateringIntervalDays > 0
     }
 
     private func preparedDraft() -> PlantDraft {

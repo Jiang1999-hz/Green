@@ -5,6 +5,8 @@ struct PlantDashboardView: View {
 
     @StateObject private var viewModel: PlantDashboardViewModel
     @State private var isPresentingCreatePlant = false
+    @State private var successMessage: String?
+    @State private var successMessageTask: Task<Void, Never>?
 
     init(container: AppContainer, viewModel: PlantDashboardViewModel) {
         self.container = container
@@ -35,10 +37,18 @@ struct PlantDashboardView: View {
             }
         }
         .sheet(isPresented: $isPresentingCreatePlant) {
-            PlantFormView(viewModel: container.makeCreatePlantViewModel())
+            PlantFormView(
+                viewModel: container.makeCreatePlantViewModel(),
+                onSaveSuccess: { _ in
+                    showSuccessMessage("植物档案已创建。")
+                }
+            )
         }
         .task {
             await viewModel.observePlants()
+        }
+        .safeAreaInset(edge: .top) {
+            successBanner
         }
     }
 
@@ -135,7 +145,10 @@ struct PlantDashboardView: View {
                         NavigationLink {
                             PlantDetailView(
                                 container: container,
-                                viewModel: container.makePlantDetailViewModel(plantID: plant.id)
+                                viewModel: container.makePlantDetailViewModel(plantID: plant.id),
+                                onDeleteSuccess: {
+                                    showSuccessMessage("植物档案已删除。")
+                                }
                             )
                         } label: {
                             plantCard(plant)
@@ -299,5 +312,42 @@ struct PlantDashboardView: View {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(.white.opacity(0.9))
         )
+    }
+
+    @ViewBuilder
+    private var successBanner: some View {
+        if let successMessage {
+            Text(successMessage)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.primary, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .transition(.move(edge: .top).combined(with: .opacity))
+        }
+    }
+
+    private func showSuccessMessage(_ message: String) {
+        successMessageTask?.cancel()
+
+        withAnimation(.spring(duration: 0.28)) {
+            successMessage = message
+        }
+
+        successMessageTask = Task {
+            try? await Task.sleep(nanoseconds: 2_200_000_000)
+            guard !Task.isCancelled else {
+                return
+            }
+
+            await MainActor.run {
+                withAnimation(.spring(duration: 0.28)) {
+                    successMessage = nil
+                }
+            }
+        }
     }
 }

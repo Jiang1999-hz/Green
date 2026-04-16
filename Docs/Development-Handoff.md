@@ -144,12 +144,16 @@
 - Current temporary behavior:
   - create flow recalculates `nextWateringDate` when saving a plant
   - edit flow preserves the existing `nextWateringDate` unless `wateringIntervalDays` changes
+- Manual verification completed for the current temporary model:
+  - edit without changing `wateringIntervalDays` preserves the existing `nextWateringDate`
+  - edit with a changed `wateringIntervalDays` value recalculates `nextWateringDate`
 - Why this matters:
   - this is acceptable for Step 1 display work
   - but reminder logic in Step 3 will be cleaner and more correct if the model is migrated to `lastWateredDate -> nextWateringDate`
 - Recommended fix before notification work:
   - add `lastWateredDate`
   - compute `nextWateringDate` from business logic rather than storing only a precomputed value
+  - treat the `lastWateredDate` migration as a planned follow-up item, not part of the current Step 1 verification
 
 #### 2. Current Verification Status
 
@@ -158,14 +162,20 @@
 - The watering-date fix was verified at the code-path level:
   - `PlantFormViewModel` now decides whether to preserve or recalculate `nextWateringDate`
   - `CoreDataPlantRepository` writes the computed `draft.nextWateringDate` directly without overriding it
+- Manual acceptance passed for Step 1:
+  - create plant
+  - edit plant
+  - delete plant
+  - cover photo handling
+  - `nextWateringDate` preservation and recalculation behavior
 - Remaining gap:
-  - end-to-end UI interaction for the edit flow still needs manual verification in Simulator or on device
+  - the `lastWateredDate` model migration has not been implemented yet
 
 #### 3. Step 1 Is Feature-Complete In Core Flow, But Still Needs Product Polish
 
 - No automated tests were added yet.
-- No user-facing success feedback was added after save/delete.
-- The form currently focuses on correctness and architecture, not polish or validation richness.
+- User-facing success feedback is now present after create, edit, and delete actions.
+- The form now shows a clearer inline validation prompt for the required plant name field.
 - The dashboard and detail UI still need final visual refinement if the PRD design language is to be matched more closely.
 
 #### 4. Photo Flow Is Good Enough For Step 1, But Not Finished As A General Media Layer
@@ -197,17 +207,17 @@
 
 ### Recommended Next Step
 
-Verify the plant edit flow manually in Xcode, specifically the watering-date behavior:
+Step 1 is accepted. Do not expand this handoff further for Step 2.
 
-1. Edit a plant without changing `wateringIntervalDays` and confirm `nextWateringDate` is preserved.
-2. Edit the same plant with a different `wateringIntervalDays` value and confirm `nextWateringDate` is recalculated from the new interval.
-3. If both checks pass, decide whether to keep the temporary `nextWateringDate` model for Step 1 polish or migrate to `lastWateredDate` before reminder work.
+1. Keep this document as the closeout record for Step 1.
+2. When Step 2 starts, create a new handoff focused on `Growth record + PhotoKit timeline`.
+3. Defer the `lastWateredDate` migration until reminder work or the next focused data-model pass.
 
 ### Resume Prompt
 
 If resuming later, start from this instruction:
 
-`Continue Green from Docs/Development-Handoff.md. Step 1 plant archive CRUD is implemented, and PlantFormViewModel now preserves nextWateringDate during edit unless wateringIntervalDays changes. Manually verify that edit behavior in Xcode, then decide whether to keep the temporary watering model or migrate to lastWateredDate before reminder work.`
+`Step 1 for Green is complete and accepted. Use Docs/Development-Handoff.md only as the Step 1 closeout record. Start Step 2 in a new handoff document focused on growth records, PhotoKit timeline work, and any supporting data-model changes.`
 
 ## 2026-04-13
 

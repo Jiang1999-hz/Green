@@ -2,15 +2,23 @@ import SwiftUI
 
 struct PlantDetailView: View {
     private let container: AppContainer
+    private let onDeleteSuccess: (() -> Void)?
 
     @Environment(\.dismiss) private var dismiss
 
     @StateObject private var viewModel: PlantDetailViewModel
     @State private var isPresentingEdit = false
     @State private var isConfirmingDelete = false
+    @State private var successMessage: String?
+    @State private var successMessageTask: Task<Void, Never>?
 
-    init(container: AppContainer, viewModel: PlantDetailViewModel) {
+    init(
+        container: AppContainer,
+        viewModel: PlantDetailViewModel,
+        onDeleteSuccess: (() -> Void)? = nil
+    ) {
         self.container = container
+        self.onDeleteSuccess = onDeleteSuccess
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
@@ -64,7 +72,12 @@ struct PlantDetailView: View {
             viewModel.load()
         }) {
             if let plant = viewModel.state.plant {
-                PlantFormView(viewModel: container.makeEditPlantViewModel(plant: plant))
+                PlantFormView(
+                    viewModel: container.makeEditPlantViewModel(plant: plant),
+                    onSaveSuccess: { _ in
+                        showSuccessMessage("植物档案已更新。")
+                    }
+                )
             }
         }
         .confirmationDialog(
@@ -74,6 +87,7 @@ struct PlantDetailView: View {
         ) {
             Button("删除植物", role: .destructive) {
                 if viewModel.deletePlant() {
+                    onDeleteSuccess?()
                     dismiss()
                 }
             }
@@ -85,6 +99,9 @@ struct PlantDetailView: View {
             Button("知道了", role: .cancel) {}
         } message: {
             Text(viewModel.state.errorMessage ?? "请稍后重试。")
+        }
+        .safeAreaInset(edge: .top) {
+            successBanner
         }
     }
 
@@ -211,5 +228,42 @@ struct PlantDetailView: View {
                 }
             }
         )
+    }
+
+    @ViewBuilder
+    private var successBanner: some View {
+        if let successMessage {
+            Text(successMessage)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .frame(maxWidth: .infinity)
+                .background(AppTheme.primary, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                .transition(.move(edge: .top).combined(with: .opacity))
+        }
+    }
+
+    private func showSuccessMessage(_ message: String) {
+        successMessageTask?.cancel()
+
+        withAnimation(.spring(duration: 0.28)) {
+            successMessage = message
+        }
+
+        successMessageTask = Task {
+            try? await Task.sleep(nanoseconds: 2_200_000_000)
+            guard !Task.isCancelled else {
+                return
+            }
+
+            await MainActor.run {
+                withAnimation(.spring(duration: 0.28)) {
+                    successMessage = nil
+                }
+            }
+        }
     }
 }

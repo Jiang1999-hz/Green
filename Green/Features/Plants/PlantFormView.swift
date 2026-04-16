@@ -6,13 +6,20 @@ struct PlantFormView: View {
     @Environment(\.dismiss) private var dismiss
 
     @StateObject private var viewModel: PlantFormViewModel
+    private let onSaveSuccess: ((PlantFormMode) -> Void)?
+
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedPhotoLoadToken = UUID()
     @State private var isPresentingCamera = false
     @State private var isShowingCameraUnavailableAlert = false
+    @State private var hasAttemptedSave = false
 
-    init(viewModel: PlantFormViewModel) {
+    init(
+        viewModel: PlantFormViewModel,
+        onSaveSuccess: ((PlantFormMode) -> Void)? = nil
+    ) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        self.onSaveSuccess = onSaveSuccess
     }
 
     var body: some View {
@@ -34,7 +41,10 @@ struct PlantFormView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(viewModel.mode.saveButtonTitle) {
                         if viewModel.save() {
+                            onSaveSuccess?(viewModel.mode)
                             dismiss()
+                        } else {
+                            hasAttemptedSave = true
                         }
                     }
                     .disabled(viewModel.isBusy)
@@ -153,6 +163,13 @@ struct PlantFormView: View {
     private var profileSection: some View {
         Section("植物档案") {
             TextField("植物名称", text: $viewModel.draft.name)
+
+            if let nameValidationMessage = viewModel.nameValidationMessage, hasAttemptedSave {
+                Text(nameValidationMessage)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+
             TextField("植物种类", text: $viewModel.draft.species)
             TextField("摆放位置", text: $viewModel.draft.location)
             DatePicker("种植日期", selection: $viewModel.draft.plantedDate, displayedComponents: .date)
@@ -165,6 +182,10 @@ struct PlantFormView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+
+            Text("保存后会按当前浇水频率生成提醒日期；编辑时只有修改浇水频率才会重算。")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
