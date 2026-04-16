@@ -34,6 +34,7 @@ final class PlantFormViewModel: ObservableObject {
 
     let mode: PlantFormMode
 
+    private let originalDraft: PlantDraft
     private let plantRepository: any PlantRepository
     private let photoLibraryService: PhotoLibraryService
 
@@ -45,6 +46,7 @@ final class PlantFormViewModel: ObservableObject {
     ) {
         self.mode = mode
         self.draft = draft
+        self.originalDraft = draft
         self.plantRepository = plantRepository
         self.photoLibraryService = photoLibraryService
     }
@@ -155,11 +157,28 @@ final class PlantFormViewModel: ObservableObject {
 
     private func preparedDraft() -> PlantDraft {
         var finalDraft = draft
-        finalDraft.nextWateringDate = Calendar.current.date(
+        finalDraft.nextWateringDate = resolvedNextWateringDate(for: finalDraft)
+        return finalDraft
+    }
+
+    private func resolvedNextWateringDate(for draft: PlantDraft) -> Date? {
+        switch mode {
+        case .create:
+            return recalculatedNextWateringDate(for: draft)
+        case .edit:
+            if draft.wateringIntervalDays != originalDraft.wateringIntervalDays {
+                return recalculatedNextWateringDate(for: draft)
+            }
+
+            return originalDraft.nextWateringDate
+        }
+    }
+
+    private func recalculatedNextWateringDate(for draft: PlantDraft) -> Date? {
+        Calendar.current.date(
             byAdding: .day,
-            value: max(finalDraft.wateringIntervalDays, 1),
+            value: max(draft.wateringIntervalDays, 1),
             to: .now
         )
-        return finalDraft
     }
 }

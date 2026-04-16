@@ -26,6 +26,9 @@
   - capture a photo in-app
   - save captured photos into the system album named `植物成长`
   - persist only the `PHAsset.localIdentifier`
+- Fixed the plant edit save behavior for watering reminders:
+  - editing a plant no longer resets `nextWateringDate` on every save
+  - `nextWateringDate` is now recalculated only when `wateringIntervalDays` changes
 
 ### Key Architecture Changes Made Today
 
@@ -139,7 +142,8 @@
 - The current data model still uses `nextWateringDate`.
 - The PRD data model expects `wateringInterval` plus `lastWateredDate`.
 - Current temporary behavior:
-  - the form recalculates `nextWateringDate` when saving a plant
+  - create flow recalculates `nextWateringDate` when saving a plant
+  - edit flow preserves the existing `nextWateringDate` unless `wateringIntervalDays` changes
 - Why this matters:
   - this is acceptable for Step 1 display work
   - but reminder logic in Step 3 will be cleaner and more correct if the model is migrated to `lastWateredDate -> nextWateringDate`
@@ -147,13 +151,15 @@
   - add `lastWateredDate`
   - compute `nextWateringDate` from business logic rather than storing only a precomputed value
 
-#### 2. Full Build Verification In The Codex Sandbox Is Still Blocked
+#### 2. Current Verification Status
 
-- `swiftc -typecheck` passed for the current Swift code.
-- `xcodebuild -list` passed and the Xcode project parses correctly.
-- Full `xcodebuild build` inside the sandbox still fails because `actool` tries to access unavailable simulator runtimes through `CoreSimulatorService`.
-- Result:
-  - The reliable verification path remains building/running in the Xcode GUI on the local machine.
+- `PlantFormViewModel.swift` was checked for live Xcode diagnostics and had no issues.
+- A full project build succeeded through the Xcode toolchain in this session.
+- The watering-date fix was verified at the code-path level:
+  - `PlantFormViewModel` now decides whether to preserve or recalculate `nextWateringDate`
+  - `CoreDataPlantRepository` writes the computed `draft.nextWateringDate` directly without overriding it
+- Remaining gap:
+  - end-to-end UI interaction for the edit flow still needs manual verification in Simulator or on device
 
 #### 3. Step 1 Is Feature-Complete In Core Flow, But Still Needs Product Polish
 
@@ -191,20 +197,17 @@
 
 ### Recommended Next Step
 
-Continue polishing and stabilizing Step 1 before moving to Step 2.
+Verify the plant edit flow manually in Xcode, specifically the watering-date behavior:
 
-Suggested order:
-
-1. Verify the new CRUD flow directly in Xcode on Simulator / device.
-2. Decide whether to migrate the watering model now (`lastWateredDate`) or defer it until the reminder phase.
-3. Add save/delete feedback and tighten validation UX.
-4. If Step 1 is accepted, then start Step 2: `Growth record + PhotoKit timeline`.
+1. Edit a plant without changing `wateringIntervalDays` and confirm `nextWateringDate` is preserved.
+2. Edit the same plant with a different `wateringIntervalDays` value and confirm `nextWateringDate` is recalculated from the new interval.
+3. If both checks pass, decide whether to keep the temporary `nextWateringDate` model for Step 1 polish or migrate to `lastWateredDate` before reminder work.
 
 ### Resume Prompt
 
 If resuming later, start from this instruction:
 
-`Continue Green from Docs/Development-Handoff.md. Step 1 plant archive CRUD has been structurally implemented with AppContainer + Repository + ViewModels. Verify the new CRUD flow in Xcode, resolve the watering-model decision, and then continue polishing Step 1 before moving to growth records.`
+`Continue Green from Docs/Development-Handoff.md. Step 1 plant archive CRUD is implemented, and PlantFormViewModel now preserves nextWateringDate during edit unless wateringIntervalDays changes. Manually verify that edit behavior in Xcode, then decide whether to keep the temporary watering model or migrate to lastWateredDate before reminder work.`
 
 ## 2026-04-13
 
