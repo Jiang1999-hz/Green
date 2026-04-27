@@ -85,6 +85,32 @@ struct PhotoLibraryService {
         return assetIdentifier
     }
 
+    func loadCGImages(
+        for assetIdentifiers: [String],
+        targetSize: CGSize,
+        progress: ((Double) -> Void)? = nil
+    ) async throws -> [CGImage] {
+        guard !assetIdentifiers.isEmpty else {
+            return []
+        }
+
+        let accessState = authorizationState(for: .readWrite)
+        guard accessState == .authorized || accessState == .limited else {
+            throw PhotoLibraryServiceError.permissionDenied
+        }
+
+        var images: [CGImage] = []
+        for (index, assetIdentifier) in assetIdentifiers.enumerated() {
+            if let image = await loadCGImage(for: assetIdentifier, targetSize: targetSize) {
+                images.append(image)
+            }
+
+            progress?(Double(index + 1) / Double(assetIdentifiers.count))
+        }
+
+        return images
+    }
+
     private func map(_ status: PHAuthorizationStatus) -> PhotoLibraryAccessState {
         switch status {
         case .notDetermined:
@@ -189,5 +215,29 @@ struct PhotoLibraryService {
         )
 
         return collections.firstObject
+    }
+
+    private func loadCGImage(for assetIdentifier: String, targetSize: CGSize) async -> CGImage? {
+        let assets = PHAsset.fetchAssets(withLocalIdentifiers: [assetIdentifier], options: nil)
+        guard let asset = assets.firstObject else {
+            return nil
+        }
+
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.resizeMode = .exact
+        options.isNetworkAccessAllowed = true
+        options.isSynchronous = false
+
+        return await withCheckedContinuation { continuation in
+            PHImageManager.default().requestImage(
+                for: asset,
+                targetSize: targetSize,
+                contentMode: .aspectFit,
+                options: options
+            ) { image, _ in
+                continuation.resume(returning: image?.cgImage)
+            }
+        }
     }
 }

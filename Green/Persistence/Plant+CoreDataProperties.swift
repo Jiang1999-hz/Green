@@ -8,6 +8,7 @@ extension Plant {
     @NSManaged public var coverPhotoAssetIdentifier: String?
     @NSManaged public var createdAt: Date
     @NSManaged public var id: UUID
+    @NSManaged public var lastWateredDate: Date?
     @NSManaged public var location: String?
     @NSManaged public var name: String
     @NSManaged public var nextWateringDate: Date?

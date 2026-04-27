@@ -33,6 +33,21 @@
 		A0000000000000000000008B /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000085 /* CameraCaptureView.swift */; };
 		A0000000000000000000008C /* PhotoAssetImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000086 /* PhotoAssetImageView.swift */; };
 		A0000000000000000000008D /* PlantFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000087 /* PlantFormView.swift */; };
+		EE2D400D2F90ACB40014400C /* GrowthRecordEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D400C2F90ACB40014400C /* GrowthRecordEntry.swift */; };
+		EE2D400F2F90ACB40014400C /* GrowthRecordDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D400E2F90ACB40014400C /* GrowthRecordDraft.swift */; };
+		EE2D40112F90ACB40014400C /* GrowthRecordRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D40102F90ACB40014400C /* GrowthRecordRepository.swift */; };
+		EE2D40132F90ACB40014400C /* CoreDataGrowthRecordRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D40122F90ACB40014400C /* CoreDataGrowthRecordRepository.swift */; };
+		EE2D40152F90ACB40014400C /* GrowthRecordFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D40142F90ACB40014400C /* GrowthRecordFormViewModel.swift */; };
+		EE2D40172F90ACB40014400C /* GrowthRecordFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D40162F90ACB40014400C /* GrowthRecordFormView.swift */; };
+		EE2D40192F90B1D20014400C /* GrowthJourneyStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D40182F90B1D20014400C /* GrowthJourneyStage.swift */; };
+		EE2D401B2F90B1D20014400C /* GrowthRecordsOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D401A2F90B1D20014400C /* GrowthRecordsOverviewView.swift */; };
+		EE2D401D2F90B4690014400C /* GrowthTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D401C2F90B4690014400C /* GrowthTheme.swift */; };
+		EE2D401F2F90B4690014400C /* GrowthThemeHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2D401E2F90B4690014400C /* GrowthThemeHeroView.swift */; };
+		EE2E35AF2F9F420B00D3621A /* PlantWateringSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2E35AE2F9F420B00D3621A /* PlantWateringSchedule.swift */; };
+		EE2E35B12F9F49BB00D3621A /* GrowthAnimationDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2E35B02F9F49BB00D3621A /* GrowthAnimationDescriptor.swift */; };
+		EED63E4A2F90BC30003B5427 /* GrowthThemePreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED63E492F90BC30003B5427 /* GrowthThemePreferenceStore.swift */; };
+		EED63E4C2F90BC31003B5427 /* WateringReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED63E4B2F90BC30003B5427 /* WateringReminderService.swift */; };
+		EED63E4E2F90BC31003B5427 /* GrowthRecordsOverviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED63E4D2F90BC31003B5427 /* GrowthRecordsOverviewViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +79,21 @@
 		A00000000000000000000085 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		A00000000000000000000086 /* PhotoAssetImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetImageView.swift; sourceTree = "<group>"; };
 		A00000000000000000000087 /* PlantFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantFormView.swift; sourceTree = "<group>"; };
+		EE2D400C2F90ACB40014400C /* GrowthRecordEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordEntry.swift; sourceTree = "<group>"; };
+		EE2D400E2F90ACB40014400C /* GrowthRecordDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordDraft.swift; sourceTree = "<group>"; };
+		EE2D40102F90ACB40014400C /* GrowthRecordRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordRepository.swift; sourceTree = "<group>"; };
+		EE2D40122F90ACB40014400C /* CoreDataGrowthRecordRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataGrowthRecordRepository.swift; sourceTree = "<group>"; };
+		EE2D40142F90ACB40014400C /* GrowthRecordFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordFormViewModel.swift; sourceTree = "<group>"; };
+		EE2D40162F90ACB40014400C /* GrowthRecordFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordFormView.swift; sourceTree = "<group>"; };
+		EE2D40182F90B1D20014400C /* GrowthJourneyStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthJourneyStage.swift; sourceTree = "<group>"; };
+		EE2D401A2F90B1D20014400C /* GrowthRecordsOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordsOverviewView.swift; sourceTree = "<group>"; };
+		EE2D401C2F90B4690014400C /* GrowthTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthTheme.swift; sourceTree = "<group>"; };
+		EE2D401E2F90B4690014400C /* GrowthThemeHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthThemeHeroView.swift; sourceTree = "<group>"; };
+		EE2E35AE2F9F420B00D3621A /* PlantWateringSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantWateringSchedule.swift; sourceTree = "<group>"; };
+		EE2E35B02F9F49BB00D3621A /* GrowthAnimationDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthAnimationDescriptor.swift; sourceTree = "<group>"; };
+		EED63E492F90BC30003B5427 /* GrowthThemePreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthThemePreferenceStore.swift; sourceTree = "<group>"; };
+		EED63E4B2F90BC30003B5427 /* WateringReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WateringReminderService.swift; sourceTree = "<group>"; };
+		EED63E4D2F90BC31003B5427 /* GrowthRecordsOverviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrowthRecordsOverviewViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000023 /* Plants */,
+				EE2D400B2F90AB9C0014400C /* GrowthRecords */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -161,6 +192,9 @@
 				A00000000000000000000019 /* NotificationPermissionService.swift */,
 				A0000000000000000000001A /* GrowthAnimationService.swift */,
 				A0000000000000000000001B /* PlantHealthAnalysisService.swift */,
+				EED63E492F90BC30003B5427 /* GrowthThemePreferenceStore.swift */,
+				EED63E4B2F90BC30003B5427 /* WateringReminderService.swift */,
+				EE2E35B02F9F49BB00D3621A /* GrowthAnimationDescriptor.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -177,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000080 /* Plants */,
+				EE2D40092F90AB9C0014400C /* GrowthRecords */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -185,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000081 /* Plants */,
+				EE2D400A2F90AB9C0014400C /* GrowthRecords */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -194,6 +230,7 @@
 			children = (
 				A00000000000000000000077 /* PlantRecord.swift */,
 				A00000000000000000000078 /* PlantDraft.swift */,
+				EE2E35AE2F9F420B00D3621A /* PlantWateringSchedule.swift */,
 			);
 			path = Plants;
 			sourceTree = "<group>";
@@ -205,6 +242,38 @@
 				A0000000000000000000007A /* CoreDataPlantRepository.swift */,
 			);
 			path = Plants;
+			sourceTree = "<group>";
+		};
+		EE2D40092F90AB9C0014400C /* GrowthRecords */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D400C2F90ACB40014400C /* GrowthRecordEntry.swift */,
+				EE2D400E2F90ACB40014400C /* GrowthRecordDraft.swift */,
+				EE2D40182F90B1D20014400C /* GrowthJourneyStage.swift */,
+				EE2D401C2F90B4690014400C /* GrowthTheme.swift */,
+			);
+			path = GrowthRecords;
+			sourceTree = "<group>";
+		};
+		EE2D400A2F90AB9C0014400C /* GrowthRecords */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D40102F90ACB40014400C /* GrowthRecordRepository.swift */,
+				EE2D40122F90ACB40014400C /* CoreDataGrowthRecordRepository.swift */,
+			);
+			path = GrowthRecords;
+			sourceTree = "<group>";
+		};
+		EE2D400B2F90AB9C0014400C /* GrowthRecords */ = {
+			isa = PBXGroup;
+			children = (
+				EE2D40142F90ACB40014400C /* GrowthRecordFormViewModel.swift */,
+				EE2D40162F90ACB40014400C /* GrowthRecordFormView.swift */,
+				EE2D401A2F90B1D20014400C /* GrowthRecordsOverviewView.swift */,
+				EE2D401E2F90B4690014400C /* GrowthThemeHeroView.swift */,
+				EED63E4D2F90BC31003B5427 /* GrowthRecordsOverviewViewModel.swift */,
+			);
+			path = GrowthRecords;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,28 +347,43 @@
 			files = (
 				A00000000000000000000030 /* GreenApp.swift in Sources */,
 				A00000000000000000000031 /* PlantDashboardView.swift in Sources */,
+				EE2D40172F90ACB40014400C /* GrowthRecordFormView.swift in Sources */,
 				A00000000000000000000032 /* AppTheme.swift in Sources */,
+				EED63E4C2F90BC31003B5427 /* WateringReminderService.swift in Sources */,
 				A00000000000000000000033 /* PersistenceController.swift in Sources */,
+				EE2D40132F90ACB40014400C /* CoreDataGrowthRecordRepository.swift in Sources */,
 				A00000000000000000000034 /* Plant+CoreDataClass.swift in Sources */,
 				A00000000000000000000035 /* Plant+CoreDataProperties.swift in Sources */,
 				A00000000000000000000036 /* GrowthRecord+CoreDataClass.swift in Sources */,
 				A00000000000000000000037 /* GrowthRecord+CoreDataProperties.swift in Sources */,
 				A00000000000000000000038 /* PhotoLibraryService.swift in Sources */,
+				EE2D401F2F90B4690014400C /* GrowthThemeHeroView.swift in Sources */,
 				A00000000000000000000039 /* NotificationPermissionService.swift in Sources */,
+				EE2D400D2F90ACB40014400C /* GrowthRecordEntry.swift in Sources */,
 				A0000000000000000000003A /* GrowthAnimationService.swift in Sources */,
+				EED63E4A2F90BC30003B5427 /* GrowthThemePreferenceStore.swift in Sources */,
+				EE2E35B12F9F49BB00D3621A /* GrowthAnimationDescriptor.swift in Sources */,
+				EE2E35AF2F9F420B00D3621A /* PlantWateringSchedule.swift in Sources */,
 				A0000000000000000000003B /* PlantHealthAnalysisService.swift in Sources */,
 				A00000000000000000000070 /* AppContainer.swift in Sources */,
+				EE2D401D2F90B4690014400C /* GrowthTheme.swift in Sources */,
+				EED63E4E2F90BC31003B5427 /* GrowthRecordsOverviewViewModel.swift in Sources */,
+				EE2D40152F90ACB40014400C /* GrowthRecordFormViewModel.swift in Sources */,
 				A00000000000000000000071 /* PlantRecord.swift in Sources */,
 				A00000000000000000000072 /* PlantDraft.swift in Sources */,
 				A00000000000000000000073 /* PlantRepository.swift in Sources */,
+				EE2D400F2F90ACB40014400C /* GrowthRecordDraft.swift in Sources */,
 				A00000000000000000000074 /* CoreDataPlantRepository.swift in Sources */,
 				A00000000000000000000075 /* PlantDashboardViewModel.swift in Sources */,
 				A00000000000000000000088 /* PlantDetailViewModel.swift in Sources */,
 				A00000000000000000000089 /* PlantDetailView.swift in Sources */,
+				EE2D401B2F90B1D20014400C /* GrowthRecordsOverviewView.swift in Sources */,
 				A0000000000000000000008A /* PlantFormViewModel.swift in Sources */,
 				A0000000000000000000008B /* CameraCaptureView.swift in Sources */,
 				A0000000000000000000008C /* PhotoAssetImageView.swift in Sources */,
 				A0000000000000000000008D /* PlantFormView.swift in Sources */,
+				EE2D40112F90ACB40014400C /* GrowthRecordRepository.swift in Sources */,
+				EE2D40192F90B1D20014400C /* GrowthJourneyStage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

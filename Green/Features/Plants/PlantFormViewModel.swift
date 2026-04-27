@@ -37,18 +37,21 @@ final class PlantFormViewModel: ObservableObject {
     private let originalDraft: PlantDraft
     private let plantRepository: any PlantRepository
     private let photoLibraryService: PhotoLibraryService
+    private let wateringReminderService: WateringReminderService
 
     init(
         mode: PlantFormMode,
         draft: PlantDraft = PlantDraft(),
         plantRepository: any PlantRepository,
-        photoLibraryService: PhotoLibraryService
+        photoLibraryService: PhotoLibraryService,
+        wateringReminderService: WateringReminderService
     ) {
         self.mode = mode
         self.draft = draft
         self.originalDraft = draft
         self.plantRepository = plantRepository
         self.photoLibraryService = photoLibraryService
+        self.wateringReminderService = wateringReminderService
     }
 
     var isBusy: Bool {
@@ -131,14 +134,18 @@ final class PlantFormViewModel: ObservableObject {
 
         do {
             let finalDraft = preparedDraft()
+            let savedPlant: PlantRecord
 
             switch mode {
             case .create:
-                _ = try plantRepository.createPlant(from: finalDraft)
+                savedPlant = try plantRepository.createPlant(from: finalDraft)
             case let .edit(plantID):
-                _ = try plantRepository.updatePlant(id: plantID, with: finalDraft)
+                savedPlant = try plantRepository.updatePlant(id: plantID, with: finalDraft)
             }
 
+            Task {
+                try? await wateringReminderService.scheduleReminder(for: savedPlant)
+            }
             errorMessage = nil
             return true
         } catch {
@@ -153,28 +160,36 @@ final class PlantFormViewModel: ObservableObject {
 
     private func preparedDraft() -> PlantDraft {
         var finalDraft = draft
+        finalDraft.lastWateredDate = resolvedLastWateredDate(for: finalDraft)
         finalDraft.nextWateringDate = resolvedNextWateringDate(for: finalDraft)
         return finalDraft
+    }
+
+    private func resolvedLastWateredDate(for draft: PlantDraft) -> Date? {
+        switch mode {
+        case .create:
+            return draft.lastWateredDate
+        case .edit:
+            return originalDraft.lastWateredDate
+        }
     }
 
     private func resolvedNextWateringDate(for draft: PlantDraft) -> Date? {
         switch mode {
         case .create:
-            return recalculatedNextWateringDate(for: draft)
+            return PlantWateringSchedule.nextWateringDate(
+                intervalDays: draft.wateringIntervalDays,
+                lastWateredDate: draft.lastWateredDate
+            )
         case .edit:
             if draft.wateringIntervalDays != originalDraft.wateringIntervalDays {
-                return recalculatedNextWateringDate(for: draft)
+                return PlantWateringSchedule.nextWateringDate(
+                    intervalDays: draft.wateringIntervalDays,
+                    lastWateredDate: originalDraft.lastWateredDate
+                )
             }
 
             return originalDraft.nextWateringDate
         }
-    }
-
-    private func recalculatedNextWateringDate(for draft: PlantDraft) -> Date? {
-        Calendar.current.date(
-            byAdding: .day,
-            value: max(draft.wateringIntervalDays, 1),
-            to: .now
-        )
     }
 }

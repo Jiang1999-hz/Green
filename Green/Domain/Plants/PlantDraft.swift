@@ -6,6 +6,7 @@ struct PlantDraft: Equatable, Sendable {
     var location: String
     var plantedDate: Date
     var wateringIntervalDays: Int
+    var lastWateredDate: Date?
     var nextWateringDate: Date?
     var notes: String
     var coverPhotoAssetIdentifier: String?
@@ -16,6 +17,7 @@ struct PlantDraft: Equatable, Sendable {
         location: String = "",
         plantedDate: Date = .now,
         wateringIntervalDays: Int = 7,
+        lastWateredDate: Date? = nil,
         nextWateringDate: Date? = nil,
         notes: String = "",
         coverPhotoAssetIdentifier: String? = nil
@@ -25,6 +27,7 @@ struct PlantDraft: Equatable, Sendable {
         self.location = location
         self.plantedDate = plantedDate
         self.wateringIntervalDays = wateringIntervalDays
+        self.lastWateredDate = lastWateredDate
         self.nextWateringDate = nextWateringDate
         self.notes = notes
         self.coverPhotoAssetIdentifier = coverPhotoAssetIdentifier
@@ -37,6 +40,7 @@ struct PlantDraft: Equatable, Sendable {
             location: plant.location ?? "",
             plantedDate: plant.plantedDate,
             wateringIntervalDays: plant.wateringIntervalDays,
+            lastWateredDate: plant.lastWateredDate,
             nextWateringDate: plant.nextWateringDate,
             notes: plant.notes ?? "",
             coverPhotoAssetIdentifier: plant.coverPhotoAssetIdentifier

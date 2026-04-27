@@ -14,6 +14,7 @@ struct PersistenceController {
         plant.location = "客厅落地窗"
         plant.plantedDate = Calendar.current.date(byAdding: .day, value: -42, to: .now) ?? .now
         plant.wateringIntervalDays = 5
+        plant.lastWateredDate = Calendar.current.date(byAdding: .day, value: -3, to: .now)
         plant.nextWateringDate = Calendar.current.date(byAdding: .day, value: 2, to: .now)
         plant.createdAt = .now
         plant.updatedAt = .now
@@ -34,6 +35,11 @@ struct PersistenceController {
 
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        }
+
+        container.persistentStoreDescriptions.forEach { description in
+            description.shouldMigrateStoreAutomatically = true
+            description.shouldInferMappingModelAutomatically = true
         }
 
         container.loadPersistentStores { _, error in

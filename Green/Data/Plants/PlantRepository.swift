@@ -20,5 +20,7 @@ protocol PlantRepository {
     func createPlant(from draft: PlantDraft) throws -> PlantRecord
     @discardableResult
     func updatePlant(id: UUID, with draft: PlantDraft) throws -> PlantRecord
+    @discardableResult
+    func markPlantWatered(id: UUID, at date: Date) throws -> PlantRecord
     func deletePlant(id: UUID) throws
 }

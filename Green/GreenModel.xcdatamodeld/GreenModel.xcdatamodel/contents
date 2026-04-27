@@ -4,6 +4,7 @@
         <attribute name="coverPhotoAssetIdentifier" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastWateredDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="name" optional="NO" attributeType="String"/>
         <attribute name="nextWateringDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

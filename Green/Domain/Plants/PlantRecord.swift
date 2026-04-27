@@ -7,6 +7,7 @@ struct PlantRecord: Identifiable, Equatable, Sendable {
     let location: String?
     let plantedDate: Date
     let wateringIntervalDays: Int
+    let lastWateredDate: Date?
     let nextWateringDate: Date?
     let notes: String?
     let coverPhotoAssetIdentifier: String?
@@ -46,6 +47,26 @@ struct PlantRecord: Identifiable, Equatable, Sendable {
         return "下次 \(nextWateringDate.formatted(date: .numeric, time: .omitted))"
     }
 
+    var lastWateredLabel: String {
+        guard let lastWateredDate else {
+            return "还没有记录"
+        }
+
+        if Calendar.current.isDateInToday(lastWateredDate) {
+            return "今天"
+        }
+
+        return lastWateredDate.formatted(date: .abbreviated, time: .omitted)
+    }
+
+    var isWateredToday: Bool {
+        guard let lastWateredDate else {
+            return false
+        }
+
+        return Calendar.current.isDateInToday(lastWateredDate)
+    }
+
     var plantedDateLabel: String {
         plantedDate.formatted(date: .abbreviated, time: .omitted)
     }
@@ -66,6 +87,10 @@ struct PlantRecord: Identifiable, Equatable, Sendable {
     }
 
     var wateringStatusLabel: String {
+        if isWateredToday {
+            return "今日已浇水"
+        }
+
         guard let nextWateringDate else {
             return "提醒待接入"
         }

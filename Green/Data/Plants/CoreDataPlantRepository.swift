@@ -75,6 +75,22 @@ final class CoreDataPlantRepository: PlantRepository {
         return mapPlant(plant)
     }
 
+    func markPlantWatered(id: UUID, at date: Date) throws -> PlantRecord {
+        guard let plant = try fetchPlantObject(id: id) else {
+            throw PlantRepositoryError.plantNotFound(id)
+        }
+
+        plant.lastWateredDate = date
+        plant.nextWateringDate = PlantWateringSchedule.nextWateringDate(
+            intervalDays: Int(plant.wateringIntervalDays),
+            lastWateredDate: date
+        )
+        plant.updatedAt = .now
+
+        try saveContext()
+        return mapPlant(plant)
+    }
+
     func deletePlant(id: UUID) throws {
         guard let plant = try fetchPlantObject(id: id) else {
             throw PlantRepositoryError.plantNotFound(id)
@@ -105,6 +121,7 @@ final class CoreDataPlantRepository: PlantRepository {
             location: plant.location,
             plantedDate: plant.plantedDate,
             wateringIntervalDays: Int(plant.wateringIntervalDays),
+            lastWateredDate: plant.lastWateredDate,
             nextWateringDate: plant.nextWateringDate,
             notes: plant.notes,
             coverPhotoAssetIdentifier: plant.coverPhotoAssetIdentifier,
@@ -124,6 +141,7 @@ final class CoreDataPlantRepository: PlantRepository {
         plant.location = draft.normalizedLocation
         plant.plantedDate = draft.plantedDate
         plant.wateringIntervalDays = Int16(clamping: draft.wateringIntervalDays)
+        plant.lastWateredDate = draft.lastWateredDate
         plant.nextWateringDate = draft.nextWateringDate
         plant.notes = draft.normalizedNotes
         plant.coverPhotoAssetIdentifier = draft.coverPhotoAssetIdentifier

@@ -2,11 +2,11 @@ import PhotosUI
 import SwiftUI
 import UIKit
 
-struct PlantFormView: View {
+struct GrowthRecordFormView: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject private var viewModel: PlantFormViewModel
-    private let onSaveSuccess: ((PlantFormMode) -> Void)?
+    @StateObject private var viewModel: GrowthRecordFormViewModel
+    private let onSaveSuccess: ((GrowthRecordFormMode) -> Void)?
 
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedPhotoLoadToken = UUID()
@@ -15,8 +15,8 @@ struct PlantFormView: View {
     @State private var hasAttemptedSave = false
 
     init(
-        viewModel: PlantFormViewModel,
-        onSaveSuccess: ((PlantFormMode) -> Void)? = nil
+        viewModel: GrowthRecordFormViewModel,
+        onSaveSuccess: ((GrowthRecordFormMode) -> Void)? = nil
     ) {
         _viewModel = StateObject(wrappedValue: viewModel)
         self.onSaveSuccess = onSaveSuccess
@@ -25,9 +25,8 @@ struct PlantFormView: View {
     var body: some View {
         NavigationStack {
             Form {
-                coverPhotoSection
-                profileSection
-                notesSection
+                photoSection
+                detailsSection
             }
             .navigationTitle(viewModel.mode.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -52,12 +51,12 @@ struct PlantFormView: View {
             }
         }
         .task(id: selectedPhotoLoadToken) {
-            guard let selectedPhotoItem = selectedPhotoItem else {
+            guard let selectedPhotoItem else {
                 return
             }
 
             let previewImage = await loadPreviewImage(from: selectedPhotoItem)
-            await viewModel.handleSelectedCoverPhoto(
+            await viewModel.handleSelectedPhoto(
                 assetIdentifier: selectedPhotoItem.itemIdentifier,
                 previewImage: previewImage
             )
@@ -66,7 +65,7 @@ struct PlantFormView: View {
             CameraCaptureView(
                 onCapture: { image in
                     Task {
-                        await viewModel.saveCapturedCoverPhoto(image)
+                        await viewModel.saveCapturedPhoto(image)
                         isPresentingCamera = false
                     }
                 },
@@ -82,7 +81,7 @@ struct PlantFormView: View {
         ) {
             Button("知道了", role: .cancel) {}
         } message: {
-            Text("请在真机上使用拍照功能，或改为从系统相册选择封面照片。")
+            Text("请在真机上使用拍照功能，或改为从系统相册选择成长照片。")
         }
         .alert(
             "保存失败",
@@ -94,21 +93,25 @@ struct PlantFormView: View {
         }
     }
 
-    private var coverPhotoSection: some View {
-        Section("封面照片") {
+    private var photoSection: some View {
+        Section("成长照片") {
             HStack {
                 Spacer()
-
-                coverPhotoPreview
-
+                photoPreview
                 Spacer()
             }
             .listRowInsets(EdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0))
 
-            if viewModel.isProcessingCoverPhoto {
+            if let photoValidationMessage = viewModel.photoValidationMessage, hasAttemptedSave {
+                Text(photoValidationMessage)
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+
+            if viewModel.isProcessingPhoto {
                 HStack(spacing: 10) {
                     ProgressView()
-                    Text("正在处理封面照片")
+                    Text("正在处理成长照片")
                         .font(.subheadline)
                 }
             }
@@ -128,71 +131,44 @@ struct PlantFormView: View {
                 Label("拍照", systemImage: "camera")
             }
 
-            if viewModel.draft.coverPhotoAssetIdentifier != nil {
+            if viewModel.draft.photoAssetIdentifier != nil {
                 Button(role: .destructive) {
-                    viewModel.removeCoverPhoto()
+                    viewModel.removePhoto()
                 } label: {
-                    Label("移除封面照片", systemImage: "trash")
+                    Label("移除成长照片", systemImage: "trash")
                 }
             }
-
-            Text("可从系统相册选择，或直接在 App 内拍摄并保存到“植物成长”相册。")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
         }
     }
 
     @ViewBuilder
-    private var coverPhotoPreview: some View {
-        if let previewImage = viewModel.coverPhotoPreviewImage {
-            Image(uiImage: previewImage)
+    private var photoPreview: some View {
+        if let photoPreviewImage = viewModel.photoPreviewImage {
+            Image(uiImage: photoPreviewImage)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 180, height: 180)
                 .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
         } else {
             PhotoAssetImageView(
-                assetIdentifier: viewModel.draft.coverPhotoAssetIdentifier,
+                assetIdentifier: viewModel.draft.photoAssetIdentifier,
                 size: CGSize(width: 180, height: 180),
                 cornerRadius: 28,
-                placeholderSystemImage: "photo.artframe"
+                placeholderSystemImage: "camera.macro"
             )
         }
     }
 
-    private var profileSection: some View {
-        Section("植物档案") {
-            TextField("植物名称", text: $viewModel.draft.name)
+    private var detailsSection: some View {
+        Section("记录信息") {
+            DatePicker("记录时间", selection: $viewModel.draft.recordedAt)
 
-            if let nameValidationMessage = viewModel.nameValidationMessage, hasAttemptedSave {
-                Text(nameValidationMessage)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-            }
+            TextEditor(text: $viewModel.draft.note)
+                .frame(minHeight: 120)
 
-            TextField("植物种类", text: $viewModel.draft.species)
-            TextField("摆放位置", text: $viewModel.draft.location)
-            DatePicker("种植日期", selection: $viewModel.draft.plantedDate, displayedComponents: .date)
-
-            Stepper(value: $viewModel.draft.wateringIntervalDays, in: 1 ... 365) {
-                HStack {
-                    Text("浇水频率")
-                    Spacer()
-                    Text("每 \(viewModel.draft.wateringIntervalDays) 天")
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            Text("保存后会按当前浇水频率生成提醒日期；之后标记已浇水时，会再按最新节奏自动顺延。")
+            Text("先记录照片、时间和观察备注。高度、健康识别和动画导出留给后续迭代接入。")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-        }
-    }
-
-    private var notesSection: some View {
-        Section("备注") {
-            TextEditor(text: $viewModel.draft.notes)
-                .frame(minHeight: 120)
         }
     }
 

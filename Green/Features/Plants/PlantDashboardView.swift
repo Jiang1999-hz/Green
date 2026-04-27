@@ -3,8 +3,11 @@ import SwiftUI
 struct PlantDashboardView: View {
     private let container: AppContainer
 
+    @Environment(\.openURL) private var openURL
+
     @StateObject private var viewModel: PlantDashboardViewModel
     @State private var isPresentingCreatePlant = false
+    @State private var isShowingNotificationMenu = false
     @State private var successMessage: String?
     @State private var successMessageTask: Task<Void, Never>?
 
@@ -26,6 +29,21 @@ struct PlantDashboardView: View {
             .background(AppTheme.background.ignoresSafeArea())
             .navigationTitle("Green")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        handleNotificationButtonTap()
+                    } label: {
+                        if viewModel.state.isUpdatingNotificationPermission {
+                            ProgressView()
+                                .tint(notificationIndicatorColor)
+                        } else {
+                            Image(systemName: viewModel.state.notificationsEnabled ? "bell.fill" : "bell.slash.fill")
+                                .foregroundStyle(notificationIndicatorColor)
+                        }
+                    }
+                    .accessibilityLabel(viewModel.state.notificationsEnabled ? "通知已开启" : "通知未开启")
+                }
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         isPresentingCreatePlant = true
@@ -46,6 +64,20 @@ struct PlantDashboardView: View {
         }
         .task {
             await viewModel.observePlants()
+            await viewModel.refreshNotificationPermissionState()
+        }
+        .confirmationDialog(
+            "通知状态",
+            isPresented: $isShowingNotificationMenu,
+            titleVisibility: .visible
+        ) {
+            Button("通知已开启") {}
+            Button("前往系统设置") {
+                openNotificationSettings()
+            }
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text("Green 当前可以发送浇水提醒，如需关闭，请前往系统设置。")
         }
         .safeAreaInset(edge: .top) {
             successBanner
@@ -93,7 +125,7 @@ struct PlantDashboardView: View {
                 summaryCard(
                     title: "今日浇水",
                     value: viewModel.state.dueTodayText,
-                    detail: "第 3 阶段会在这里接入通知和高亮提醒。"
+                    detail: viewModel.state.wateringProgressDetailText
                 )
             }
 
@@ -107,7 +139,7 @@ struct PlantDashboardView: View {
                 summaryCard(
                     title: "今日浇水",
                     value: viewModel.state.dueTodayText,
-                    detail: "第 3 阶段会在这里接入通知和高亮提醒。"
+                    detail: viewModel.state.wateringProgressDetailText
                 )
             }
         }
@@ -207,7 +239,8 @@ struct PlantDashboardView: View {
 
                     statusBadge(
                         text: plant.wateringStatusLabel,
-                        highlight: plant.isWateringDueToday
+                        highlight: plant.isWateringDueToday,
+                        completed: plant.isWateredToday
                     )
                 }
 
@@ -217,7 +250,10 @@ struct PlantDashboardView: View {
                         metaBadge(plant.displayLocation)
                     }
 
-                    metaBadge(plant.nextWateringLabel)
+                    HStack(spacing: 8) {
+                        metaBadge(plant.nextWateringLabel)
+                        metaBadge("上次 \(plant.lastWateredLabel)")
+                    }
                 }
             }
         }
@@ -229,14 +265,14 @@ struct PlantDashboardView: View {
         )
     }
 
-    private func statusBadge(text: String, highlight: Bool) -> some View {
+    private func statusBadge(text: String, highlight: Bool, completed: Bool = false) -> some View {
         Text(text)
             .font(.caption.weight(.semibold))
-            .foregroundStyle(highlight ? .white : AppTheme.primary)
+            .foregroundStyle(highlight || completed ? .white : AppTheme.primary)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(
-                highlight ? AppTheme.primary : AppTheme.primary.opacity(0.12),
+                completed ? Color.green : (highlight ? AppTheme.primary : AppTheme.primary.opacity(0.12)),
                 in: Capsule()
             )
     }
@@ -265,6 +301,10 @@ struct PlantDashboardView: View {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(.white.opacity(0.86))
         )
+    }
+
+    private var notificationIndicatorColor: Color {
+        viewModel.state.notificationsEnabled ? .green : .red
     }
 
     private func statusCard(title: String, detail: String) -> some View {
@@ -349,5 +389,26 @@ struct PlantDashboardView: View {
                 }
             }
         }
+    }
+
+    private func handleNotificationButtonTap() {
+        switch viewModel.state.reminderPermissionState {
+        case .authorized, .provisional, .ephemeral:
+            isShowingNotificationMenu = true
+        case .notDetermined:
+            Task {
+                await viewModel.requestNotificationPermissionIfNeeded()
+            }
+        case .denied:
+            openNotificationSettings()
+        }
+    }
+
+    private func openNotificationSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+
+        openURL(settingsURL)
     }
 }
