@@ -53,6 +53,50 @@ struct PlantDashboardState: Equatable {
         reminderPermissionState.allowsScheduling
     }
 
+    var growthQuickActionCandidates: [PlantRecord] {
+        plants
+    }
+
+    var wateringQuickActionCandidates: [PlantRecord] {
+        let duePlants = plants.filter { $0.isWateringDueToday && !$0.isWateredToday }
+        if !duePlants.isEmpty {
+            return duePlants
+        }
+
+        let notWateredPlants = plants.filter { !$0.isWateredToday }
+        return notWateredPlants.isEmpty ? plants : notWateredPlants
+    }
+
+    var dueWateringQuickActionCount: Int {
+        plants.filter { $0.isWateringDueToday && !$0.isWateredToday }.count
+    }
+
+    var growthQuickActionDetailText: String {
+        switch growthQuickActionCandidates.count {
+        case 0:
+            return "先创建植物"
+        case 1:
+            return "直接进入记录"
+        default:
+            return "\(growthQuickActionCandidates.count) 株可选"
+        }
+    }
+
+    var wateringQuickActionDetailText: String {
+        if dueWateringQuickActionCount > 0 {
+            return "\(dueWateringQuickActionCount) 株待处理"
+        }
+
+        switch wateringQuickActionCandidates.count {
+        case 0:
+            return "暂无植物"
+        case 1:
+            return "快速更新状态"
+        default:
+            return "\(wateringQuickActionCandidates.count) 株可选"
+        }
+    }
+
     var reminderSummaryText: String {
         switch reminderPermissionState {
         case .authorized, .provisional, .ephemeral:
@@ -144,6 +188,21 @@ final class PlantDashboardViewModel: ObservableObject {
             state.errorMessage = nil
         } catch {
             state.errorMessage = "通知权限请求失败，请稍后重试。"
+        }
+    }
+
+    func markPlantWatered(plantID: UUID) async -> PlantRecord? {
+        do {
+            let updatedPlant = try plantRepository.markPlantWatered(id: plantID, at: .now)
+            state.errorMessage = nil
+            state.plants = state.plants.map { plant in
+                plant.id == updatedPlant.id ? updatedPlant : plant
+            }
+            await refreshReminderState(for: state.plants)
+            return updatedPlant
+        } catch {
+            state.errorMessage = "更新浇水状态失败，请稍后重试。"
+            return nil
         }
     }
 
